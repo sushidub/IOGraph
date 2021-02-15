@@ -1,9 +1,8 @@
 package com.iographica.osx;
 
 import java.util.ArrayList;
-
-import com.apple.eawt.AboutHandler;
-import com.apple.eawt.AppEvent.AboutEvent;
+import java.awt.desktop.AboutHandler;
+import java.awt.desktop.AboutEvent;
 import com.iographica.core.Data;
 import com.iographica.events.IEventDispatcher;
 import com.iographica.events.IEventHandler;

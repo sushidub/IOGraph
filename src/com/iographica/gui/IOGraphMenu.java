@@ -5,14 +5,19 @@ import java.awt.Menu;
 import java.awt.MenuBar;
 import java.awt.MenuItem;
 import java.awt.MenuShortcut;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+// import java.awt.event.ActionEvent;
+// import java.awt.event.ActionListener;
+// import java.awt.event.ItemEvent;
+// import java.awt.event.ItemListener;
+// import java.awt.event.KeyEvent;
+// import java.lang.reflect.InvocationTargetException;
+// import java.lang.reflect.Method;
+import java.awt.event.*;
+// import java.awt.desktop.*;
+import java.awt.*;
 import java.util.ArrayList;
+
+// import javax.swing.text.html.ObjectView;
 
 import com.iographica.core.Data;
 import com.iographica.core.IOGraph;
@@ -25,6 +30,7 @@ import com.iographica.osx.OSXExtensions;
 public class IOGraphMenu extends MenuBar implements IEventDispatcher, IEventHandler {
 
 	private static final long serialVersionUID = 8783422766432999905L;
+  private static Desktop desktop;
 	private AboutDialog _aboutDialog;
 	private ArrayList<IEventHandler> _eventHandlers;
 	private MenuItem _checkForUpdateMenuItem;
@@ -205,14 +211,15 @@ public class IOGraphMenu extends MenuBar implements IEventDispatcher, IEventHand
 			}
 		});
 		if (Data.isOSX) {
-			com.apple.eawt.Application app = (com.apple.eawt.Application) getApplication();
+
+			Desktop app = getDesktop();
 			Object aboutHandler = getOSXExtension(OSXExtensions.osxAboutHandler);
 			((IEventDispatcher) aboutHandler).addEventHandler(this);
-			app.setAboutHandler((com.apple.eawt.AboutHandler) aboutHandler);
+			app.setAboutHandler((java.awt.desktop.AboutHandler) aboutHandler);
 
 			Object quitHandler = getOSXExtension(OSXExtensions.osxQuitHandler);
 			((IEventDispatcher) quitHandler).addEventHandler(this);
-			app.setQuitHandler((com.apple.eawt.QuitHandler) quitHandler);
+			app.setQuitHandler((java.awt.desktop.QuitHandler) quitHandler);
 		}
 	}
 
@@ -232,32 +239,45 @@ public class IOGraphMenu extends MenuBar implements IEventDispatcher, IEventHand
 		return null;
 	}
 
-	private Object getApplication() {
-		Class<?> cls = null;
-		try {
-			cls = Class.forName(OSXExtensions.application);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		Method mtd = null;
-		try {
-			mtd = cls.getDeclaredMethod("getApplication");
-		} catch (SecurityException e1) {
-			e1.printStackTrace();
-		} catch (NoSuchMethodException e1) {
-			e1.printStackTrace();
-		}
-		try {
-			return mtd.invoke(null);
-		} catch (IllegalArgumentException e1) {
-			e1.printStackTrace();
-		} catch (IllegalAccessException e1) {
-			e1.printStackTrace();
-		} catch (InvocationTargetException e1) {
-			e1.printStackTrace();
-		}
-		return null;
-	}
+  /**
+   * Get the desktop where OS behavior can be provided.
+   *
+   * @return Cached desktop singleton instance.
+   */
+  static private Desktop getDesktop() {
+    if (desktop == null) {
+      desktop = Desktop.getDesktop();
+    }
+    return desktop;
+  }
+
+
+	// private Object getApplication() {
+	// 	Class<?> cls = null;
+	// 	try {
+	// 		cls = Class.forName(OSXExtensions.application);
+	// 	} catch (ClassNotFoundException e) {
+	// 		e.printStackTrace();
+	// 	}
+	// 	Method mtd = null;
+	// 	try {
+	// 		mtd = cls.getDeclaredMethod("getApplication");
+	// 	} catch (SecurityException e1) {
+	// 		e1.printStackTrace();
+	// 	} catch (NoSuchMethodException e1) {
+	// 		e1.printStackTrace();
+	// 	}
+	// 	try {
+	// 		return mtd.invoke(null);
+	// 	} catch (IllegalArgumentException e1) {
+	// 		e1.printStackTrace();
+	// 	} catch (IllegalAccessException e1) {
+	// 		e1.printStackTrace();
+	// 	} catch (InvocationTargetException e1) {
+	// 		e1.printStackTrace();
+	// 	}
+	// 	return null;
+	// }
 
 	public void showAboutDialog() {
 		if (_aboutDialog == null) {

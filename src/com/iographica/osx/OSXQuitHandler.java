@@ -2,9 +2,9 @@ package com.iographica.osx;
 
 import java.util.ArrayList;
 
-import com.apple.eawt.AppEvent.QuitEvent;
-import com.apple.eawt.QuitHandler;
-import com.apple.eawt.QuitResponse;
+import java.awt.desktop.QuitEvent;
+import java.awt.desktop.QuitHandler;
+import java.awt.desktop.QuitResponse;
 import com.iographica.core.Data;
 import com.iographica.events.IEventDispatcher;
 import com.iographica.events.IEventHandler;

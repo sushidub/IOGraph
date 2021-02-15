@@ -1,6 +1,8 @@
 # Mac cache:
 .DS_Store
 
+MousePath.java
+
 # Eclipse IDE
 bin
 .externalToolBuilders
